@@ -61,6 +61,11 @@ export default function TransactionDialog({
   const [customerId, setCustomerId] = useState('');
   const [locationId, setLocationId] = useState('');
 
+  const selectedProduct = products.find(p => p.id === productId);
+  const selectedSupplier = suppliers.find(s => s.id === supplierId);
+  const selectedCustomer = customers.find(c => c.id === customerId);
+  const selectedLocation = locations.find(l => l.id === locationId);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!productId || !quantity || !operator || !locationId) return;
@@ -101,7 +106,9 @@ export default function TransactionDialog({
                 <Label htmlFor="product" className="text-xs font-bold text-gray-500 uppercase tracking-wider">选择产品</Label>
                 <Select onValueChange={setProductId} value={productId}>
                   <SelectTrigger className="w-full bg-gray-50 border-gray-100 rounded-xl h-11 focus:ring-indigo-500">
-                    <SelectValue placeholder="选择产品" />
+                    <SelectValue placeholder="选择产品">
+                      {selectedProduct?.name}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-white border-gray-100 rounded-xl">
                     {products.map((p) => (
@@ -133,7 +140,9 @@ export default function TransactionDialog({
                 {type === 'INBOUND' ? (
                   <Select onValueChange={setSupplierId} value={supplierId}>
                     <SelectTrigger className="w-full bg-gray-50 border-gray-100 rounded-xl h-11 focus:ring-indigo-500">
-                      <SelectValue placeholder="选择供应商" />
+                      <SelectValue placeholder="选择供应商">
+                        {selectedSupplier?.name}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-white border-gray-100 rounded-xl">
                       {suppliers.map((s) => (
@@ -144,7 +153,9 @@ export default function TransactionDialog({
                 ) : (
                   <Select onValueChange={setCustomerId} value={customerId}>
                     <SelectTrigger className="w-full bg-gray-50 border-gray-100 rounded-xl h-11 focus:ring-indigo-500">
-                      <SelectValue placeholder="选择客户" />
+                      <SelectValue placeholder="选择客户">
+                        {selectedCustomer?.name}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-white border-gray-100 rounded-xl">
                       {customers.map((c) => (
@@ -158,7 +169,9 @@ export default function TransactionDialog({
                 <Label className="text-xs font-bold text-gray-500 uppercase tracking-wider">存入/取出仓位</Label>
                 <Select onValueChange={setLocationId} value={locationId}>
                   <SelectTrigger className="w-full bg-gray-50 border-gray-100 rounded-xl h-11 focus:ring-indigo-500">
-                    <SelectValue placeholder="选择仓位" />
+                    <SelectValue placeholder="选择仓位">
+                      {selectedLocation ? `${selectedLocation.warehouseName} - ${selectedLocation.code}` : undefined}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-white border-gray-100 rounded-xl">
                     {locations.map((l) => (

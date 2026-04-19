@@ -117,11 +117,20 @@ export default function App() {
 
     // Initial users check
     const savedUsers = localStorage.getItem('inventory_users');
+    let currentUsers: User[] = [];
     if (savedUsers) {
-      setUsers(JSON.parse(savedUsers));
+      currentUsers = JSON.parse(savedUsers);
+      // Force update admin password to the specified one (case-insensitive)
+      currentUsers = currentUsers.map(u => 
+        (u.username.toLowerCase() === 'admin') 
+          ? { ...u, password: '989426334', username: 'admin' } // Standardize to lowercase admin too
+          : u
+      );
+      setUsers(currentUsers);
+      localStorage.setItem('inventory_users', JSON.stringify(currentUsers));
     } else {
       const defaultUsers: User[] = [
-        { id: '1', username: 'admin', name: '系统管理员', role: 'ADMIN', password: 'admin', department: '管理部', phone: '13800138000', status: 'ACTIVE' },
+        { id: '1', username: 'admin', name: '系统管理员', role: 'ADMIN', password: '989426334', department: '管理部', phone: '13800138000', status: 'ACTIVE' },
         { id: '2', username: 'operator', name: '王大力', role: 'OPERATOR', password: '123', department: '仓储部', phone: '13911112222', status: 'ACTIVE' },
       ];
       setUsers(defaultUsers);
@@ -241,6 +250,20 @@ export default function App() {
   };
 
   const lowStockItems = products.filter(p => p.currentStock <= p.minStock);
+
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-4">
+        <LoginDialog
+          isOpen={true}
+          onClose={() => {}} // Mandatory login
+          onLogin={handleLogin}
+          users={users}
+          isFullPage
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] font-sans">
@@ -546,19 +569,25 @@ export default function App() {
                 users={users}
                 onAdd={(user) => {
                   const newUser: User = { ...user, id: Math.random().toString(36).substr(2, 9) };
-                  const updated = [...users, newUser];
-                  setUsers(updated);
-                  localStorage.setItem('inventory_users', JSON.stringify(updated));
+                  setUsers(prev => {
+                    const updated = [...prev, newUser];
+                    localStorage.setItem('inventory_users', JSON.stringify(updated));
+                    return updated;
+                  });
                 }}
                 onEdit={(user) => {
-                  const updated = users.map(u => u.id === user.id ? user : u);
-                  setUsers(updated);
-                  localStorage.setItem('inventory_users', JSON.stringify(updated));
+                  setUsers(prev => {
+                    const updated = prev.map(u => u.id === user.id ? user : u);
+                    localStorage.setItem('inventory_users', JSON.stringify(updated));
+                    return updated;
+                  });
                 }}
                 onDelete={(id) => {
-                  const updated = users.filter(u => u.id !== id);
-                  setUsers(updated);
-                  localStorage.setItem('inventory_users', JSON.stringify(updated));
+                  setUsers(prev => {
+                    const updated = prev.filter(u => u.id !== id);
+                    localStorage.setItem('inventory_users', JSON.stringify(updated));
+                    return updated;
+                  });
                 }}
               />
             )}

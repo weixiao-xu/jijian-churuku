@@ -1,6 +1,6 @@
-# 极简出入库管理系统
+# 微库管理系统
 
-这是一个基于 React、Vite 和 TypeScript 的出入库管理系统。
+这是一个基于 React、Vite、TypeScript、Express 和 Socket.IO 的微库管理系统。
 
 ## 本地运行
 
@@ -11,29 +11,19 @@ npm run dev
 
 本地开发命令会启动 `server.ts`，用于提供前端页面和 Socket.IO 在线聊天。
 
-## 构建静态站点
+## 构建
 
 ```bash
 npm run build
 ```
 
-构建产物会输出到 `dist/`，可以部署到 GitHub Pages。
-
-## GitHub Pages 部署
-
-仓库已包含 `.github/workflows/deploy-pages.yml`。推送到 `main` 分支后，在 GitHub 仓库的 Pages 设置中选择 GitHub Actions 作为发布来源，即可自动部署。
-
-## 多人访问说明
-
-GitHub Pages 可以让多人通过同一个网址访问系统，但它只能托管静态前端。当前库存、用户、供应商、客户等业务数据保存在每个浏览器自己的 `localStorage` 中，不会自动同步给其他人。
-
-如果需要多人共享同一份库存数据，需要再部署一个后端服务和数据库，例如 Supabase、Firebase、Render、Railway 或一台自己的服务器。
+构建产物会输出到 `dist/`。
 
 ## Render 部署
 
-项目已包含 `render.yaml`，可以部署为 Render Web Service，用来运行 `server.ts` 中的 Express 和 Socket.IO 服务。
+项目包含 `render.yaml`，可以部署为 Render Web Service，用来运行 `server.ts` 中的 Express 和 Socket.IO 服务。
 
-部署时连接 GitHub 仓库 `weixiao-xu/jijian-churuku`，Render 会自动读取以下配置：
+Render 会自动读取以下配置：
 
 ```yaml
 buildCommand: npm ci && npm run build
@@ -41,3 +31,7 @@ startCommand: npm run start
 ```
 
 Render 会提供 `PORT` 环境变量，服务会自动监听该端口。
+
+## GitHub Pages 说明
+
+GitHub Pages 可以托管静态页面，但不能运行 `server.ts`，因此不适合作为在线聊天版本的主站。需要在线对话时，请使用 Render 地址。

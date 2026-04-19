@@ -64,11 +64,11 @@ export default function UserDialog({ isOpen, onClose, onSubmit, initialData }: U
     if (!name || !username || (!initialData && !password)) return;
     
     const userData: any = {
-      name,
-      username,
+      name: name.trim(),
+      username: username.trim(),
       role,
-      department,
-      phone,
+      department: department.trim(),
+      phone: phone.trim(),
       status,
     };
 
@@ -81,6 +81,18 @@ export default function UserDialog({ isOpen, onClose, onSubmit, initialData }: U
     } else {
       onSubmit(userData);
     }
+  };
+
+  const roleLabels: Record<string, string> = {
+    ADMIN: '超级管理员',
+    OPERATOR: '仓库管理员',
+    FINANCE: '财务出纳',
+    VIEWER: '只读访客',
+  };
+
+  const statusLabels: Record<string, string> = {
+    ACTIVE: '正常启用',
+    INACTIVE: '禁止登录',
   };
 
   return (
@@ -146,7 +158,9 @@ export default function UserDialog({ isOpen, onClose, onSubmit, initialData }: U
                 <Label className="text-xs font-bold text-gray-500 uppercase tracking-wider">系统角色</Label>
                 <Select onValueChange={(v: any) => setRole(v)} value={role}>
                   <SelectTrigger className="w-full bg-gray-50 border-gray-100 rounded-xl h-11 focus:ring-indigo-500">
-                    <SelectValue placeholder="分配角色" />
+                    <SelectValue placeholder="分配角色">
+                      {role && roleLabels[role]}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-white border-gray-100 rounded-xl">
                     <SelectItem value="ADMIN">超级管理员</SelectItem>
@@ -161,7 +175,9 @@ export default function UserDialog({ isOpen, onClose, onSubmit, initialData }: U
                 <Label className="text-xs font-bold text-gray-500 uppercase tracking-wider">账号状态</Label>
                 <Select onValueChange={(v: any) => setStatus(v)} value={status}>
                   <SelectTrigger className="w-full bg-gray-50 border-gray-100 rounded-xl h-11 focus:ring-indigo-500">
-                    <SelectValue placeholder="选择状态" />
+                    <SelectValue placeholder="选择状态">
+                      {status && statusLabels[status]}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-white border-gray-100 rounded-xl">
                     <SelectItem value="ACTIVE">正常启用</SelectItem>
