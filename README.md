@@ -28,3 +28,16 @@ npm run build
 GitHub Pages 可以让多人通过同一个网址访问系统，但它只能托管静态前端。当前库存、用户、供应商、客户等业务数据保存在每个浏览器自己的 `localStorage` 中，不会自动同步给其他人。
 
 如果需要多人共享同一份库存数据，需要再部署一个后端服务和数据库，例如 Supabase、Firebase、Render、Railway 或一台自己的服务器。
+
+## Render 部署
+
+项目已包含 `render.yaml`，可以部署为 Render Web Service，用来运行 `server.ts` 中的 Express 和 Socket.IO 服务。
+
+部署时连接 GitHub 仓库 `weixiao-xu/jijian-churuku`，Render 会自动读取以下配置：
+
+```yaml
+buildCommand: npm ci && npm run build
+startCommand: npm run start
+```
+
+Render 会提供 `PORT` 环境变量，服务会自动监听该端口。
