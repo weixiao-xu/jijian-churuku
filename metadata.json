@@ -1,0 +1,6 @@
+{
+  "name": "极简出入库管理系统",
+  "description": "一个专业、直观的库存出入库管理系统，包含实时仪表盘、库存监控和交易记录。",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
